@@ -2,10 +2,15 @@ import { auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const SignUp = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const { name, email, password } = event.target.elements;
+    createUserWithEmailAndPassword(auth, email.value, password.value);
+  };
   return (
     <div>
       <h1>ユーザ登録</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div>
           <label>メールアドレス</label>
           <input name="email" type="email" placeholder="email" />
