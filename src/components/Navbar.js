@@ -14,6 +14,11 @@ const Navbar = () => {
     }
   }, [user, navigate]);
 
+  const handleLogout = () => {
+    auth.signOut();
+    navigate("/");
+  };
+
   const handleLogin = () => {
     navigate("/");
   };
@@ -33,7 +38,9 @@ const Navbar = () => {
                   Sign up
                 </button>
                 {user ? (
-                  <button class="button is-light">Log out</button>
+                  <button onClick={handleLogout} class="button is-light">
+                    Log out
+                  </button>
                 ) : (
                   <button onClick={handleLogin} class="button is-light">
                     Log in
