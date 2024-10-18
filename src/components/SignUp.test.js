@@ -12,7 +12,7 @@ jest.mock("firebase/auth", () => ({
   createUserWithEmailAndPassword: jest.fn(),
 }));
 
-describe("SignUp Component", () => {
+describe("登録処理のテスト", () => {
   it("ユーザーが正しく登録されている", async () => {
     createUserWithEmailAndPassword.mockResolvedValueOnce({
       user: { uid: "12345", email: "test@example.com" },
