@@ -3,11 +3,16 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import SignUp from "./Signup";
 import Login from "./Login";
+import Navbar from "./Navbar";
 import { auth } from "../firebase";
 import { BrowserRouter } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
+import { signOut } from "firebase/auth";
 
 jest.mock("../firebase", () => ({
-  auth: {}, // authをモック
+  auth: {
+    signOut: jest.fn(),
+  }, // authをモック
 }));
 
 jest.mock("firebase/auth", () => ({
@@ -80,6 +85,32 @@ describe("ログインのテスト", () => {
         email,
         password
       );
+    });
+  });
+});
+jest.mock("../context/AuthContext", () => ({
+  useAuthContext: jest.fn(),
+}));
+
+describe("Navbarのログアウトテスト", () => {
+  test("ユーザーが正しくログアウトできる", async () => {
+    // Mock user context
+    useAuthContext.mockReturnValue({ user: { email: "test@example.com" } });
+
+    // Mock a successful logout
+    auth.signOut.mockResolvedValueOnce();
+
+    render(
+      <BrowserRouter>
+        <Navbar />
+      </BrowserRouter>
+    );
+
+    // Click the logout button
+    fireEvent.click(screen.getByRole("button", { name: "Log out" }));
+
+    await waitFor(() => {
+      expect(auth.signOut).toHaveBeenCalledWith();
     });
   });
 });
